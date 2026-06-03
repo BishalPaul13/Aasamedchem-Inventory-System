@@ -48,6 +48,7 @@ export async function logoutAction() {
 
 // Seller Profile Actions
 export async function createSellerProfileAction(_, formData) {
+  formData = actionFormData(_, formData);
   const user = await requireUser('seller');
   const companyName = String(formData.get('company_name') || '').trim();
   const businessRegistration = String(formData.get('business_registration') || '').trim();
