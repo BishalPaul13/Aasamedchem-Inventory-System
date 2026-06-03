@@ -4,7 +4,7 @@ import { logoutAction } from '@/app/actions';
 export default function Nav({ user, active }) {
   return (
     <header className="topbar">
-      <Link className="brand" href={user ? '/dashboard' : '/'}>Aasa MedChem</Link>
+      <Link className="brand" href={user ? '/dashboard' : '/'}>aasamedchem</Link>
       <nav className="nav">
         {user ? (
           <>

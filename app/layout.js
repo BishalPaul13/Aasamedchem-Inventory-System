@@ -1,7 +1,7 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'Aasa MedChem Inventory',
+  title: 'aasamedchem Inventory',
   description: 'Inventory and quotation management for flexible units.'
 };
 
