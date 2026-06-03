@@ -1,0 +1,23 @@
+{
+  "name": "aasamedchem-inventory",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:migrate": "node scripts/migrate.js",
+    "db:seed": "node scripts/seed.js"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4",
+    "next": "^15.0.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.0.3"
+  }
+}
