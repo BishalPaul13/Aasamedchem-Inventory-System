@@ -6,7 +6,7 @@ import { getSql } from '@/lib/db';
 import { getSellerProfile } from '@/lib/marketplace';
 import { redirect } from 'next/navigation';
 
-export default async function CreateQuotePage() {
+export default async function CreateQuotePage({ searchParams }) {
   const seller = await requireUser('seller');
   const profile = await getSellerProfile(seller.id);
 
@@ -29,7 +29,30 @@ export default async function CreateQuotePage() {
     );
   }
 
+  const params = await searchParams;
+  const requestId = params?.request_id;
+  const buyerId = params?.buyer_id;
+
   const sql = getSql();
+  
+  let prefilledBuyer = null;
+  let prefilledProducts = [];
+
+  // If coming from a buyer request, load those details
+  if (requestId && buyerId) {
+    const [buyer] = await sql`
+      SELECT id, name, email FROM users WHERE id = ${buyerId} AND role = 'buyer'
+    `;
+    prefilledBuyer = buyer;
+
+    prefilledProducts = await sql`
+      SELECT p.id, oi.ordered_quantity as suggested_quantity, oi.ordered_unit as suggested_unit
+      FROM order_items oi
+      JOIN products p ON oi.product_id = p.id
+      WHERE oi.order_id = ${requestId}
+    `;
+  }
+
   const [buyers, products] = await Promise.all([
     sql`SELECT id, name, email FROM users WHERE role = 'buyer' ORDER BY name`,
     sql`SELECT * FROM products WHERE is_active = true ORDER BY name`
@@ -46,7 +69,12 @@ export default async function CreateQuotePage() {
           </div>
           <p className="page-note">Choose buyer, products, delivery terms, and validity.</p>
         </div>
-        <CreateQuoteForm products={products} buyers={buyers} />
+        <CreateQuoteForm 
+          products={products} 
+          buyers={buyers} 
+          prefilledBuyer={prefilledBuyer}
+          prefilledProducts={prefilledProducts}
+        />
       </section>
     </main>
   );
