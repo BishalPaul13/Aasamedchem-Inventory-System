@@ -8,6 +8,7 @@ export default async function DashboardPage({ searchParams }) {
   const user = await requireUser();
   const q = params?.q || '';
   const category = params?.category || '';
+  const dashboardTitle = user.role === 'buyer' ? 'Buyer dashboard' : 'Seller dashboard';
   const [products, categories] = await Promise.all([
     listProducts({ q, category }),
     listCategories()
@@ -17,8 +18,13 @@ export default async function DashboardPage({ searchParams }) {
     <main className="shell">
       <Nav user={user} active="dashboard" />
       <section className="page">
-        <h1>Browse products</h1>
-        <p className="page-intro">Search products, enter an order quantity in any compatible unit, and review the conversion before placing a quotation.</p>
+        <div className="page-heading">
+          <div>
+            <p className="eyebrow-text">{dashboardTitle}</p>
+            <h1>Build a quote</h1>
+          </div>
+          <p className="page-note">Search stock, enter quantity, review INR total.</p>
+        </div>
         <form className="toolbar">
           <label>
             Search

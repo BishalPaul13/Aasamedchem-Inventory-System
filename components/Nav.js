@@ -4,17 +4,30 @@ import { logoutAction } from '@/app/actions';
 export default function Nav({ user, active }) {
   return (
     <header className="topbar">
-      <Link className="brand" href={user ? '/dashboard' : '/'}>aasamedchem</Link>
+      <Link className="brand" href={user ? (user.role === 'admin' ? '/admin' : '/dashboard') : '/'}>aasamedchem</Link>
       <nav className="nav">
         {user ? (
           <>
-            <Link className={active === 'dashboard' ? 'active' : ''} href="/dashboard">Browse</Link>
-            <Link className={active === 'orders' ? 'active' : ''} href="/orders">My orders</Link>
+            {user.role === 'seller' && (
+              <>
+                <Link className={active === 'quotes' ? 'active' : ''} href="/seller/quotes">Quotes</Link>
+                <Link className={active === 'create-quote' ? 'active' : ''} href="/seller/create-quote">+ Quote</Link>
+              </>
+            )}
+            {user.role === 'buyer' && (
+              <>
+                <Link className={active === 'buyer-quotes' ? 'active' : ''} href="/buyer/quotes">Quotes</Link>
+                <Link className={active === 'dashboard' ? 'active' : ''} href="/dashboard">Orders</Link>
+              </>
+            )}
             {user.role === 'admin' ? (
               <>
-                <Link className={active === 'admin' ? 'active' : ''} href="/admin">Admin</Link>
+                <Link className={active === 'admin' ? 'active' : ''} href="/admin">Dashboard</Link>
                 <Link className={active === 'products' ? 'active' : ''} href="/admin/products">Products</Link>
                 <Link className={active === 'admin-orders' ? 'active' : ''} href="/admin/orders">Orders</Link>
+                <Link className={active === 'sellers' ? 'active' : ''} href="/admin/sellers">Sellers</Link>
+                <Link className={active === 'quotes' ? 'active' : ''} href="/admin/quotes">Quotes</Link>
+                <Link className={active === 'disputes' ? 'active' : ''} href="/admin/disputes">Disputes</Link>
               </>
             ) : null}
             <span className="pill">{user.role}</span>

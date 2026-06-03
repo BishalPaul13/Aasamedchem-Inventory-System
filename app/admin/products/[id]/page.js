@@ -14,6 +14,7 @@ export default async function EditProductPage({ params }) {
     <main className="shell">
       <Nav user={user} active="products" />
       <section className="page">
+        <p className="eyebrow-text">Inventory</p>
         <h1>Edit product</h1>
         <ProductForm product={product} />
       </section>

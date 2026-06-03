@@ -80,15 +80,15 @@ export default function OrderBuilder({ products, user, error }) {
                 </select>
               </label>
               <div>
-                <p className="muted small">Rate in selected unit</p>
+                <p className="muted small">Rate</p>
                 <strong>{formatInr(displayPrice)} / {currentUnit}</strong>
               </div>
               <div>
-                <p className="muted small">Base conversion</p>
+                <p className="muted small">Base qty</p>
                 <strong>{calculated?.baseQuantity ? formatQuantity(calculated.baseQuantity, product.base_unit) : '-'}</strong>
               </div>
               <div>
-                <p className="muted small">Line total</p>
+                <p className="muted small">Amount</p>
                 <strong>{calculated?.lineTotal ? formatInr(calculated.lineTotal) : '-'}</strong>
               </div>
             </div>
@@ -97,10 +97,10 @@ export default function OrderBuilder({ products, user, error }) {
       </div>
       <div className="summary panel">
         <div>
-          <p className="muted small">Quotation total</p>
+          <p className="muted small">Total</p>
           <div className="total">{formatInr(totals.total)}</div>
         </div>
-        <SubmitButton>Place quotation</SubmitButton>
+        <SubmitButton>Create quote</SubmitButton>
       </div>
     </form>
   );

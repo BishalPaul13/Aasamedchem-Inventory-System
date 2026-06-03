@@ -1,10 +1,13 @@
 const crypto = require('node:crypto');
+require('./env');
 const { neon } = require('@neondatabase/serverless');
+
+const PASSWORD_ITERATIONS = 120000;
 
 function hashPassword(password) {
   const salt = crypto.randomBytes(16).toString('hex');
-  const hash = crypto.pbkdf2Sync(password, salt, 310000, 32, 'sha256').toString('hex');
-  return `${salt}:${hash}`;
+  const hash = crypto.pbkdf2Sync(password, salt, PASSWORD_ITERATIONS, 32, 'sha256').toString('hex');
+  return `pbkdf2$${PASSWORD_ITERATIONS}$${salt}$${hash}`;
 }
 
 async function main() {
@@ -17,7 +20,8 @@ async function main() {
     INSERT INTO users (name, email, password_hash, role)
     VALUES
       ('Admin', 'admin@example.com', ${hashPassword('Admin@12345')}, 'admin'),
-      ('Seller', 'seller@example.com', ${hashPassword('Seller@12345')}, 'seller')
+      ('Seller', 'seller@example.com', ${hashPassword('Seller@12345')}, 'seller'),
+      ('Buyer', 'buyer@example.com', ${hashPassword('Buyer@12345')}, 'buyer')
     ON CONFLICT (email) DO UPDATE
       SET name = EXCLUDED.name,
           password_hash = EXCLUDED.password_hash,

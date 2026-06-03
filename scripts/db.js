@@ -1,3 +1,5 @@
+require('./env');
+
 const { Pool } = require('@neondatabase/serverless');
 
 function getPool() {

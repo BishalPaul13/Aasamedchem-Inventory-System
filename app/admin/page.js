@@ -18,16 +18,21 @@ export default async function AdminPage() {
     <main className="shell">
       <Nav user={user} active="admin" />
       <section className="page">
-        <h1>Admin</h1>
-        <p className="page-intro">Manage catalog data, base-unit inventory, INR rates, and incoming quotations.</p>
+        <div className="page-heading">
+          <div>
+            <p className="eyebrow-text">Admin dashboard</p>
+            <h1>Operations</h1>
+          </div>
+          <p className="page-note">Inventory, pricing, and order status.</p>
+        </div>
         <div className="grid three">
-          <div className="panel"><p className="muted small">Products</p><div className="total">{stats.products}</div></div>
-          <div className="panel"><p className="muted small">Orders</p><div className="total">{stats.orders}</div></div>
-          <div className="panel"><p className="muted small">Quoted value</p><div className="total">{formatInr(stats.total)}</div></div>
+          <div className="panel stat-panel"><p className="muted small">Catalog</p><div className="total">{stats.products}</div></div>
+          <div className="panel stat-panel"><p className="muted small">Orders</p><div className="total">{stats.orders}</div></div>
+          <div className="panel stat-panel"><p className="muted small">Quoted value</p><div className="total">{formatInr(stats.total)}</div></div>
         </div>
         <div className="actions" style={{ marginTop: 18 }}>
-          <Link className="button" href="/admin/products">Manage products</Link>
-          <Link className="button secondary" href="/admin/orders">View orders</Link>
+          <Link className="button" href="/admin/products">Inventory</Link>
+          <Link className="button secondary" href="/admin/orders">Order queue</Link>
         </div>
       </section>
     </main>

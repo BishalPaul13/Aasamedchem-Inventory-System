@@ -1,7 +1,14 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
 DO $$ BEGIN
-  CREATE TYPE user_role AS ENUM ('admin', 'seller');
+  CREATE TYPE user_role AS ENUM ('admin', 'seller', 'buyer');
+EXCEPTION
+  WHEN duplicate_object THEN NULL;
+END $$;
+
+DO $$ BEGIN
+  ALTER TYPE user_role ADD VALUE IF NOT EXISTS 'buyer';
 EXCEPTION
   WHEN duplicate_object THEN NULL;
 END $$;
@@ -78,4 +85,7 @@ CREATE INDEX IF NOT EXISTS products_search_idx ON products USING gin (
   to_tsvector('english', name || ' ' || sku || ' ' || category || ' ' || description)
 );
 
+CREATE INDEX IF NOT EXISTS products_name_trgm_idx ON products USING gin (name gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS products_sku_trgm_idx ON products USING gin (sku gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS products_category_trgm_idx ON products USING gin (category gin_trgm_ops);
 CREATE INDEX IF NOT EXISTS orders_created_at_idx ON orders(created_at DESC);

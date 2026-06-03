@@ -15,8 +15,9 @@ export default async function AdminProductsPage() {
       <section className="page">
         <div className="summary">
           <div>
-            <h1>Products</h1>
-            <p className="page-intro">Catalog entries use base units for inventory and pricing.</p>
+            <p className="eyebrow-text">Admin dashboard</p>
+            <h1>Inventory</h1>
+            <p className="page-note">Stock, base units, and INR rates.</p>
           </div>
           <Link className="button" href="/admin/products/new">New product</Link>
         </div>

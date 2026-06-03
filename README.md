@@ -1,11 +1,11 @@
-# Aasa MedChem Inventory
+# aasamedchem Inventory
 
 A small inventory and quotation management system built with Next.js, JavaScript, Neon PostgreSQL, and Vercel.
 
 ## Features
 
-- Cookie-based authentication with two roles: `admin` and `seller`.
-- Seller dashboard for product search, category filtering, flexible quantity entry, live conversion preview, INR line totals, and quotation placement.
+- Cookie-based authentication with three roles: `admin`, `seller`, and `buyer`.
+- Seller and buyer dashboard for product search, category filtering, flexible quantity entry, live conversion preview, INR line totals, and quotation placement.
 - Admin dashboard for catalog management, base-unit inventory/pricing, order review, and order status updates.
 - Order records preserve product snapshots, ordered units, converted base quantities, base rates, and INR totals so conversions can be audited later.
 
@@ -24,7 +24,7 @@ Key tables are defined in [db/schema.sql](./db/schema.sql).
   - `id UUID`
   - `email TEXT UNIQUE`
   - `password_hash TEXT`
-  - `role user_role`, either `admin` or `seller`
+  - `role user_role`, either `admin`, `seller`, or `buyer`
 - `products`
   - `dimension dimension_type`, one of `weight`, `volume`, `count`
   - `base_unit unit_code`, constrained to `g`, `mL`, or `unit`
@@ -64,7 +64,7 @@ Inventory is always saved in the product base unit. Prices are always saved as I
 
 Conversions are centralized in [lib/units.js](./lib/units.js):
 
-- The seller UI uses `toBaseQuantity`, `unitToBaseFactor`, and `calculateLineTotal` for live previews before submission.
+- The seller/buyer UI uses `toBaseQuantity`, `unitToBaseFactor`, and `calculateLineTotal` for live previews before submission.
 - `placeOrderAction` in [app/actions.js](./app/actions.js) validates the selected unit, converts the ordered quantity to the base unit, calculates totals, and saves both the original ordered values and converted values.
 - Admin order detail pages display ordered quantity, converted base quantity, stored base rate, and line total side by side.
 
@@ -103,14 +103,15 @@ The UI intentionally shows the selected-unit rate and converted base quantity wh
 
 - Admin: `admin@example.com` / `Admin@12345`
 - Seller: `seller@example.com` / `Seller@12345`
+- Buyer: `buyer@example.com` / `Buyer@12345`
 
 These users are created by `npm run db:seed`. Change them before using the app with real data.
 
 ## How To Use
 
-Seller flow:
+Seller or buyer flow:
 
-1. Log in as the seller.
+1. Log in as the seller or buyer.
 2. Search or filter products on `/dashboard`.
 3. Enter a quantity and choose a compatible unit.
 4. Review the selected-unit rate, base conversion, line total, and quotation total.

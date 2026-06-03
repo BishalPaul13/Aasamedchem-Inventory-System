@@ -12,8 +12,8 @@ export default function OrdersTable({ orders, admin = false }) {
             <th>Customer</th>
             <th>Status</th>
             <th>Total</th>
-            <th>Created</th>
-            <th>Actions</th>
+            <th>Date</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -30,17 +30,17 @@ export default function OrdersTable({ orders, admin = false }) {
                     <option value="rejected">Rejected</option>
                     <option value="fulfilled">Fulfilled</option>
                   </select>
-                  <button className="secondary" type="submit">Update</button>
+                  <button className="secondary" type="submit">Save</button>
                 </form>
               ) : order.status}</td>
               <td>{formatInr(order.total_inr)}</td>
               <td>{new Date(order.created_at).toLocaleString('en-IN')}</td>
-              <td><Link className="button secondary" href={`/orders/${order.id}`}>View</Link></td>
+              <td><Link className="button secondary" href={`/orders/${order.id}`}>Open</Link></td>
             </tr>
           ))}
         </tbody>
       </table>
-      {orders.length === 0 ? <p className="muted">No orders yet.</p> : null}
+      {orders.length === 0 ? <p className="muted empty-state">No orders yet.</p> : null}
     </div>
   );
 }

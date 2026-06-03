@@ -11,8 +11,13 @@ export default async function OrdersPage() {
     <main className="shell">
       <Nav user={user} active="orders" />
       <section className="page">
-        <h1>My orders</h1>
-        <p className="page-intro">Review placed quotations and their current status.</p>
+        <div className="page-heading">
+          <div>
+            <p className="eyebrow-text">{user.role} dashboard</p>
+            <h1>Orders</h1>
+          </div>
+          <p className="page-note">Your quote history and status.</p>
+        </div>
         <OrdersTable orders={orders} admin={false} />
       </section>
     </main>

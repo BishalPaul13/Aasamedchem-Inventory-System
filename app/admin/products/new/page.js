@@ -8,6 +8,7 @@ export default async function NewProductPage() {
     <main className="shell">
       <Nav user={user} active="products" />
       <section className="page">
+        <p className="eyebrow-text">Inventory</p>
         <h1>New product</h1>
         <ProductForm />
       </section>
