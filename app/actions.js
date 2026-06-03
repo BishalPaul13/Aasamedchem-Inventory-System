@@ -29,7 +29,10 @@ export async function loginAction(_, formData) {
     return { error: 'Invalid email or password.' };
   }
   await setSession(user);
-  redirect(user.role === 'admin' ? '/admin' : '/dashboard');
+  if (user.role === 'admin') redirect('/admin');
+  if (user.role === 'seller') redirect('/seller/quotes');
+  if (user.role === 'buyer') redirect('/buyer/quotes');
+  redirect('/dashboard');
 }
 
 export async function logoutAction() {

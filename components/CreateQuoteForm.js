@@ -9,7 +9,7 @@ export default function CreateQuoteForm({ products, buyers }) {
 
   return (
     <form action={action} className="stack">
-      <h2>Create Quote</h2>
+      <h2>Quote details</h2>
 
       {state?.error && (
         <div className="error">{state.error}</div>
@@ -32,7 +32,7 @@ export default function CreateQuoteForm({ products, buyers }) {
 
       <label>
         Delivery Terms
-        <textarea name="delivery_terms" placeholder="e.g., Free shipping, COD available" required />
+        <textarea name="delivery_terms" placeholder="Freight, payment terms, handling notes" required />
       </label>
 
       <label>
@@ -40,10 +40,11 @@ export default function CreateQuoteForm({ products, buyers }) {
         <input type="number" name="validity_days" defaultValue="7" min="1" />
       </label>
 
-      <h3>Products</h3>
+      <h3>Line items</h3>
       <div className="stack">
         {products.map(product => (
           <div key={product.id} className="panel">
+            <input type="hidden" name="product_id" value={product.id} />
             <div style={{ display: 'grid', gridTemplateColumns: '1fr auto auto auto', gap: '12px', alignItems: 'center' }}>
               <div>
                 <strong>{product.name}</strong>
@@ -63,7 +64,7 @@ export default function CreateQuoteForm({ products, buyers }) {
               <input 
                 type="number" 
                 name={`price_${product.id}`}
-                placeholder="Price/unit"
+                placeholder="INR/unit"
                 step="0.01"
                 min="0"
               />
@@ -72,7 +73,7 @@ export default function CreateQuoteForm({ products, buyers }) {
         ))}
       </div>
 
-      <SubmitButton className="button">Create Quote</SubmitButton>
+      <SubmitButton className="button">Save quote</SubmitButton>
     </form>
   );
 }

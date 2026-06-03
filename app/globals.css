@@ -414,6 +414,10 @@ th {
   margin: 16px 0 0;
 }
 
+.section-gap {
+  margin-top: 18px;
+}
+
 .error {
   color: var(--danger);
   font-weight: 700;

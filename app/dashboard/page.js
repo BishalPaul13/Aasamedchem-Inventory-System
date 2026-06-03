@@ -2,13 +2,15 @@ import Nav from '@/components/Nav';
 import OrderBuilder from '@/components/OrderBuilder';
 import { requireUser } from '@/lib/auth';
 import { listCategories, listProducts } from '@/lib/products';
+import { redirect } from 'next/navigation';
 
 export default async function DashboardPage({ searchParams }) {
   const params = await searchParams;
   const user = await requireUser();
+  if (user.role === 'admin') redirect('/admin');
+  if (user.role === 'seller') redirect('/seller/quotes');
   const q = params?.q || '';
   const category = params?.category || '';
-  const dashboardTitle = user.role === 'buyer' ? 'Buyer dashboard' : 'Seller dashboard';
   const [products, categories] = await Promise.all([
     listProducts({ q, category }),
     listCategories()
@@ -20,10 +22,10 @@ export default async function DashboardPage({ searchParams }) {
       <section className="page">
         <div className="page-heading">
           <div>
-            <p className="eyebrow-text">{dashboardTitle}</p>
-            <h1>Build a quote</h1>
+            <p className="eyebrow-text">Buyer workspace</p>
+            <h1>Request items</h1>
           </div>
-          <p className="page-note">Search stock, enter quantity, review INR total.</p>
+          <p className="page-note">Select products and quantities before comparing seller quotes.</p>
         </div>
         <form className="toolbar">
           <label>

@@ -1,114 +1,71 @@
+import Link from 'next/link';
+import Nav from '@/components/Nav';
 import { requireUser } from '@/lib/auth';
 import { getAllSellerProfiles } from '@/lib/marketplace';
-import Link from 'next/link';
 
 export default async function AdminSellersPage() {
   const admin = await requireUser('admin');
   const sellers = await getAllSellerProfiles();
 
-  const pendingSellers = sellers.filter(s => s.status === 'pending');
-  const approvedSellers = sellers.filter(s => s.status === 'approved');
-  const rejectedSellers = sellers.filter(s => s.status === 'rejected');
+  const pendingSellers = sellers.filter((seller) => seller.status === 'pending');
+  const approvedSellers = sellers.filter((seller) => seller.status === 'approved');
+  const rejectedSellers = sellers.filter((seller) => seller.status === 'rejected');
 
   return (
-    <div className="page">
-      <div className="page-heading">
-        <div>
-          <div className="eyebrow-text">Admin Panel</div>
-          <h1>Seller Management</h1>
-        </div>
-      </div>
-
-      {/* Pending Sellers */}
-      {pendingSellers.length > 0 && (
-        <div className="stack">
-          <h2>Pending Approval ({pendingSellers.length})</h2>
-          <div className="panel">
-            <table>
-              <thead>
-                <tr>
-                  <th>Company Name</th>
-                  <th>Contact Name</th>
-                  <th>Email</th>
-                  <th>Registration</th>
-                  <th>Applied</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {pendingSellers.map(s => (
-                  <tr key={s.id}>
-                    <td><strong>{s.company_name}</strong></td>
-                    <td>{s.name}</td>
-                    <td>{s.email}</td>
-                    <td className="small muted">{s.business_registration || '—'}</td>
-                    <td className="small muted">{new Date(s.created_at).toLocaleDateString()}</td>
-                    <td>
-                      <Link href={`/admin/sellers/${s.user_id}`} className="button secondary">Review</Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+    <main className="shell">
+      <Nav user={admin} active="admin-sellers" />
+      <section className="page">
+        <div className="page-heading">
+          <div>
+            <p className="eyebrow-text">Admin workspace</p>
+            <h1>Seller approval</h1>
           </div>
+          <p className="page-note">Review seller profiles before they can send quotes.</p>
         </div>
-      )}
 
-      {/* Approved Sellers */}
-      {approvedSellers.length > 0 && (
-        <div className="stack">
-          <h2>Approved Sellers ({approvedSellers.length})</h2>
-          <div className="panel">
-            <table>
-              <thead>
-                <tr>
-                  <th>Company Name</th>
-                  <th>Contact</th>
-                  <th>Email</th>
-                  <th>Approved</th>
-                </tr>
-              </thead>
-              <tbody>
-                {approvedSellers.map(s => (
-                  <tr key={s.id}>
-                    <td><strong>{s.company_name}</strong></td>
-                    <td>{s.name}</td>
-                    <td>{s.email}</td>
-                    <td className="small muted">{new Date(s.approved_at).toLocaleDateString()}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        <div className="grid three">
+          <div className="panel stat-panel"><p className="muted small">Pending</p><div className="total">{pendingSellers.length}</div></div>
+          <div className="panel stat-panel"><p className="muted small">Approved</p><div className="total">{approvedSellers.length}</div></div>
+          <div className="panel stat-panel"><p className="muted small">Rejected</p><div className="total">{rejectedSellers.length}</div></div>
         </div>
-      )}
 
-      {/* Rejected Sellers */}
-      {rejectedSellers.length > 0 && (
-        <div className="stack">
-          <h2>Rejected Sellers ({rejectedSellers.length})</h2>
-          <div className="panel">
-            <table>
-              <thead>
-                <tr>
-                  <th>Company Name</th>
-                  <th>Contact</th>
-                  <th>Rejection Reason</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rejectedSellers.map(s => (
-                  <tr key={s.id}>
-                    <td><strong>{s.company_name}</strong></td>
-                    <td>{s.name}</td>
-                    <td className="small">{s.approval_notes || '—'}</td>
+        {pendingSellers.length > 0 ? (
+          <section className="stack section-gap">
+            <h2>Needs review</h2>
+            <div className="panel">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Company</th>
+                    <th>Contact</th>
+                    <th>Email</th>
+                    <th>Registration</th>
+                    <th>Applied</th>
+                    <th></th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {pendingSellers.map((seller) => (
+                    <tr key={seller.id}>
+                      <td><strong>{seller.company_name}</strong></td>
+                      <td>{seller.name}</td>
+                      <td>{seller.email}</td>
+                      <td className="small muted">{seller.business_registration || '-'}</td>
+                      <td className="small muted">{new Date(seller.created_at).toLocaleDateString()}</td>
+                      <td><Link href={`/admin/sellers/${seller.user_id}`} className="button secondary">Review</Link></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        ) : (
+          <div className="panel empty-state section-gap">
+            <h2>No seller profiles waiting</h2>
+            <p className="muted">New seller applications will appear here.</p>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </section>
+    </main>
   );
 }

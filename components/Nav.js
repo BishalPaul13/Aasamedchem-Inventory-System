@@ -4,30 +4,31 @@ import { logoutAction } from '@/app/actions';
 export default function Nav({ user, active }) {
   return (
     <header className="topbar">
-      <Link className="brand" href={user ? (user.role === 'admin' ? '/admin' : '/dashboard') : '/'}>aasamedchem</Link>
+      <Link className="brand" href={user ? (user.role === 'admin' ? '/admin' : user.role === 'seller' ? '/seller/quotes' : '/buyer/quotes') : '/'}>aasamedchem</Link>
       <nav className="nav">
         {user ? (
           <>
             {user.role === 'seller' && (
               <>
-                <Link className={active === 'quotes' ? 'active' : ''} href="/seller/quotes">Quotes</Link>
-                <Link className={active === 'create-quote' ? 'active' : ''} href="/seller/create-quote">+ Quote</Link>
+                <Link className={active === 'seller-quotes' ? 'active' : ''} href="/seller/quotes">Sent quotes</Link>
+                <Link className={active === 'seller-create' ? 'active' : ''} href="/seller/create-quote">New quote</Link>
               </>
             )}
             {user.role === 'buyer' && (
               <>
-                <Link className={active === 'buyer-quotes' ? 'active' : ''} href="/buyer/quotes">Quotes</Link>
-                <Link className={active === 'dashboard' ? 'active' : ''} href="/dashboard">Orders</Link>
+                <Link className={active === 'buyer-quotes' ? 'active' : ''} href="/buyer/quotes">Seller quotes</Link>
+                <Link className={active === 'dashboard' ? 'active' : ''} href="/dashboard">Request items</Link>
+                <Link className={active === 'orders' ? 'active' : ''} href="/orders">Orders</Link>
               </>
             )}
             {user.role === 'admin' ? (
               <>
-                <Link className={active === 'admin' ? 'active' : ''} href="/admin">Dashboard</Link>
-                <Link className={active === 'products' ? 'active' : ''} href="/admin/products">Products</Link>
+                <Link className={active === 'admin' ? 'active' : ''} href="/admin">Overview</Link>
+                <Link className={active === 'products' ? 'active' : ''} href="/admin/products">Inventory</Link>
                 <Link className={active === 'admin-orders' ? 'active' : ''} href="/admin/orders">Orders</Link>
-                <Link className={active === 'sellers' ? 'active' : ''} href="/admin/sellers">Sellers</Link>
-                <Link className={active === 'quotes' ? 'active' : ''} href="/admin/quotes">Quotes</Link>
-                <Link className={active === 'disputes' ? 'active' : ''} href="/admin/disputes">Disputes</Link>
+                <Link className={active === 'admin-sellers' ? 'active' : ''} href="/admin/sellers">Seller approval</Link>
+                <Link className={active === 'admin-quotes' ? 'active' : ''} href="/admin/quotes">Quote review</Link>
+                <Link className={active === 'admin-disputes' ? 'active' : ''} href="/admin/disputes">Disputes</Link>
               </>
             ) : null}
             <span className="pill">{user.role}</span>

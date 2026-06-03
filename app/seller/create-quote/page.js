@@ -1,7 +1,8 @@
-import { requireUser } from '@/lib/auth';
-import { getSellerProfile } from '@/lib/marketplace';
-import { getSql } from '@/lib/db';
+import Nav from '@/components/Nav';
 import CreateQuoteForm from '@/components/CreateQuoteForm';
+import { requireUser } from '@/lib/auth';
+import { getSql } from '@/lib/db';
+import { getSellerProfile } from '@/lib/marketplace';
 
 export default async function CreateQuotePage() {
   const seller = await requireUser('seller');
@@ -9,26 +10,37 @@ export default async function CreateQuotePage() {
 
   if (!profile || profile.status !== 'approved') {
     return (
-      <div className="page">
-        <h1>Profile Not Approved</h1>
-        <p>Only approved sellers can create quotes.</p>
-      </div>
+      <main className="shell">
+        <Nav user={seller} active="seller-create" />
+        <section className="page">
+          <div className="panel empty-state">
+            <h1>Seller approval required</h1>
+            <p className="muted">Only approved sellers can prepare quotes for buyers.</p>
+          </div>
+        </section>
+      </main>
     );
   }
 
   const sql = getSql();
-  const buyers = await sql`
-    SELECT id, name, email FROM users WHERE role = 'buyer' ORDER BY name
-  `;
-  const products = await sql`
-    SELECT * FROM products WHERE is_active = true ORDER BY name
-  `;
+  const [buyers, products] = await Promise.all([
+    sql`SELECT id, name, email FROM users WHERE role = 'buyer' ORDER BY name`,
+    sql`SELECT * FROM products WHERE is_active = true ORDER BY name`
+  ]);
 
   return (
-    <div className="page">
-      <div className="eyebrow-text">Seller Panel</div>
-      <h1>Create Quote</h1>
-      <CreateQuoteForm products={products} buyers={buyers} />
-    </div>
+    <main className="shell">
+      <Nav user={seller} active="seller-create" />
+      <section className="page">
+        <div className="page-heading">
+          <div>
+            <p className="eyebrow-text">Seller workspace</p>
+            <h1>Prepare quote</h1>
+          </div>
+          <p className="page-note">Choose buyer, products, delivery terms, and validity.</p>
+        </div>
+        <CreateQuoteForm products={products} buyers={buyers} />
+      </section>
+    </main>
   );
 }

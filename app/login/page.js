@@ -6,7 +6,9 @@ export const revalidate = 0;
 
 export default async function LoginPage() {
   const user = await getCurrentUser();
-  if (user) redirect(user.role === 'admin' ? '/admin' : '/dashboard');
+  if (user?.role === 'admin') redirect('/admin');
+  if (user?.role === 'seller') redirect('/seller/quotes');
+  if (user?.role === 'buyer') redirect('/buyer/quotes');
 
   return (
     <main className="login-page-wrap">

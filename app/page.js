@@ -11,7 +11,7 @@ export default async function HomePage() {
         <div className="hero-inner">
           <span className="eyebrow">Inventory and quotation control</span>
           <h1>aasamedchem</h1>
-          <p>Manage chemical inventory, convert units cleanly, and generate INR quotations with audit-ready pricing from the first request to admin review.</p>
+          <p>A quote workflow for medical chemical supply: buyers request items, approved sellers prepare INR quotes, and admins verify inventory, sellers, and pricing before orders move forward.</p>
           <div className="hero-actions">
             <Link className="button" href={user ? '/dashboard' : '/login'}>{user ? 'Open dashboard' : 'Log in'}</Link>
             <Link className="button secondary ghost" href="/login">View demo access</Link>
@@ -41,7 +41,7 @@ export default async function HomePage() {
                 <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
                 <line x1="12" y1="22.08" x2="12" y2="12" />
               </svg>
-              Base-unit stock
+              Inventory units
             </h2>
             <p className="muted">Weight is stored in grams, volume in milliliters, and count in units.</p>
           </div>
@@ -50,18 +50,18 @@ export default async function HomePage() {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#0f766e' }}>
                 <path d="M6 3h12M6 8h12M6 13h8.5a4.5 4.5 0 0 0 0-9H6M9 13l9 9" />
               </svg>
-              INR pricing
+              Seller quotes
             </h2>
-            <p className="muted">Rates are stored as INR per base unit with high-precision numeric columns.</p>
+            <p className="muted">Sellers quote buyers with delivery terms, validity dates, and itemized INR totals.</p>
           </div>
           <div className="panel feature-panel">
             <h2>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#0f766e' }}>
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
               </svg>
-              Role access
+              Admin verification
             </h2>
-          <p className="muted">Admins manage catalog and orders. Sellers and buyers browse, quote, and track their orders.</p>
+            <p className="muted">Admins review seller approvals, quote status, inventory, orders, and disputes.</p>
           </div>
         </div>
       </section>
