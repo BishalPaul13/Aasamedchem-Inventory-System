@@ -3,12 +3,17 @@ import Nav from '@/components/Nav';
 import { requireUser } from '@/lib/auth';
 import { getQuotesBySeller, getSellerProfile } from '@/lib/marketplace';
 import { formatInr } from '@/lib/units';
+import { redirect } from 'next/navigation';
 
 export default async function SellerQuotesPage() {
   const seller = await requireUser('seller');
   const profile = await getSellerProfile(seller.id);
 
-  if (!profile || profile.status !== 'approved') {
+  if (!profile) {
+    redirect('/seller/profile');
+  }
+
+  if (profile.status !== 'approved') {
     return (
       <main className="shell">
         <Nav user={seller} active="seller-quotes" />
@@ -16,6 +21,7 @@ export default async function SellerQuotesPage() {
           <div className="panel empty-state">
             <h1>Seller approval required</h1>
             <p className="muted">Admin approval is required before you can send quotes to buyers.</p>
+            <Link href="/seller/profile" className="button secondary">View profile</Link>
           </div>
         </section>
       </main>

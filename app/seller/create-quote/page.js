@@ -1,14 +1,20 @@
+import Link from 'next/link';
 import Nav from '@/components/Nav';
 import CreateQuoteForm from '@/components/CreateQuoteForm';
 import { requireUser } from '@/lib/auth';
 import { getSql } from '@/lib/db';
 import { getSellerProfile } from '@/lib/marketplace';
+import { redirect } from 'next/navigation';
 
 export default async function CreateQuotePage() {
   const seller = await requireUser('seller');
   const profile = await getSellerProfile(seller.id);
 
-  if (!profile || profile.status !== 'approved') {
+  if (!profile) {
+    redirect('/seller/profile');
+  }
+
+  if (profile.status !== 'approved') {
     return (
       <main className="shell">
         <Nav user={seller} active="seller-create" />
@@ -16,6 +22,7 @@ export default async function CreateQuotePage() {
           <div className="panel empty-state">
             <h1>Seller approval required</h1>
             <p className="muted">Only approved sellers can prepare quotes for buyers.</p>
+            <Link href="/seller/profile" className="button secondary">View profile</Link>
           </div>
         </section>
       </main>

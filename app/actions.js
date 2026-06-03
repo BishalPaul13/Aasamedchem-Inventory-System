@@ -23,6 +23,10 @@ function value(formData, key) {
   return String(formData.get(key) || '').trim();
 }
 
+function actionFormData(firstArg, secondArg) {
+  return secondArg || firstArg;
+}
+
 export async function loginAction(_, formData) {
   const user = await login(value(formData, 'email'), value(formData, 'password'));
   if (!user) {
@@ -59,6 +63,7 @@ export async function createSellerProfileAction(_, formData) {
 
 // Admin Seller Approval Actions
 export async function approveSellerAction(_, formData) {
+  formData = actionFormData(_, formData);
   const admin = await requireUser('admin');
   const sellerId = String(formData.get('seller_id') || '').trim();
   
@@ -66,10 +71,12 @@ export async function approveSellerAction(_, formData) {
   
   await approveSellerProfile(sellerId, admin.id);
   revalidatePath('/admin');
-  redirect('/admin');
+  revalidatePath('/admin/sellers');
+  redirect('/admin/sellers');
 }
 
 export async function rejectSellerAction(_, formData) {
+  formData = actionFormData(_, formData);
   const admin = await requireUser('admin');
   const sellerId = String(formData.get('seller_id') || '').trim();
   const rejectionReason = String(formData.get('reason') || '').trim();
@@ -78,7 +85,8 @@ export async function rejectSellerAction(_, formData) {
   
   await rejectSellerProfile(sellerId, rejectionReason);
   revalidatePath('/admin');
-  redirect('/admin');
+  revalidatePath('/admin/sellers');
+  redirect('/admin/sellers');
 }
 
 // Quote Creation (Seller)

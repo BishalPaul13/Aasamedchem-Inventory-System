@@ -12,6 +12,7 @@ export default function Nav({ user, active }) {
               <>
                 <Link className={active === 'seller-quotes' ? 'active' : ''} href="/seller/quotes">Sent quotes</Link>
                 <Link className={active === 'seller-create' ? 'active' : ''} href="/seller/create-quote">New quote</Link>
+                <Link className={active === 'seller-profile' ? 'active' : ''} href="/seller/profile">Profile</Link>
               </>
             )}
             {user.role === 'buyer' && (

@@ -29,6 +29,14 @@ async function main() {
   `;
 
   await sql`
+    INSERT INTO seller_profiles (user_id, company_name, business_registration, status)
+    SELECT id, 'Aasamedchem Demo Supplier', 'GSTIN-DEMO-SELLER-001', 'pending'
+    FROM users
+    WHERE email = 'seller@example.com'
+    ON CONFLICT (user_id) DO NOTHING
+  `;
+
+  await sql`
     INSERT INTO products (sku, name, category, description, dimension, base_unit, inventory_base_quantity, price_per_base_unit_inr)
     VALUES
       ('CHEM-NA-001', 'Sodium Chloride', 'Salts', 'Analytical grade sodium chloride.', 'weight', 'g', 250000.000000000000, 0.420000000000),
